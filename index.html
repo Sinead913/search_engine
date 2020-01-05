@@ -5,9 +5,40 @@
 
 <script type="text/javascript">
 
+let searchURL = "https://helloworld-chznwwuy5a-uc.a.run.app";
+let searchResult = "";
+let searchCriteria = "";
+
+const Display = async () =>
+{
+  var result="";
+  for (var i=0; i<searchResult.length; i++) {
+    result += "<p><a href='" + searchResult[i] + "'>" + searchResult[i] + "</a></p>";
+  }
+  document.getElementById('results').innerHTML = result;
+}
+
 const Search = async () =>
 {
+  searchCriteria = document.getElementById('display').value;
+      try {
+          let xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function() {
+              if (this.readyState == 4 && this.status == 200) {
+                  var j = JSON.parse(this.response);
+                  searchResult = j.answer;
+                  Display().catch(err => console.log(err));
+              }
+          };
 
+          xhttp.open("GET",searchURL+"?search="+searchCriteria);
+          xhttp.send();
+        } catch (err) {
+          searchResult = "";
+            console.log(err);
+            Display().catch(err => console.log(err));
+        }
+          return;
 }
 
 </script>
@@ -62,6 +93,7 @@ body  {
         <input type="text" id="display" value="">
         <button class="searchButton" onclick="Search();">Search</button>
     </div>
+    <div id="results"></div>
 </div>
 </body>
 
