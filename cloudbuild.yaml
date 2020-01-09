@@ -7,6 +7,6 @@ steps:
   args: ['push', 'gcr.io/cloudcomputing3032/search_engine']
 # Deploy container image to Cloud Run
 - name: 'gcr.io/cloud-builders/gcloud'
-  args: ['run', 'deploy', 'search_engine', '--image', 'gcr.io/cloudcomputing3032/search_engine', '--region', 'us-central1', '--platform', 'managed', '--allow-unauthenticated']
+  args: ['run', 'deploy', 'searchengine', '--image', 'gcr.io/cloudcomputing3032/search_engine', '--region', 'us-central1', '--platform', 'managed', '--allow-unauthenticated']
 images:
        - gcr.io/cloudcomputing3032/search_engine
