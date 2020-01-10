@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="utf-8"/>
 <title>Search Engine</title>
 
 <script type="text/javascript">
 
 let searchURL = "https://helloworld-chznwwuy5a-uc.a.run.app";
+let adsURL = "https://ads-chznwwuy5a-uc.a.run.app";
 let searchResult = "";
+let adsResult = "";
 let searchCriteria = "";
 
 const Display = async () =>
@@ -16,29 +19,66 @@ const Display = async () =>
     result += "<p><a href='" + searchResult[i] + "'>" + searchResult[i] + "</a></p>";
   }
   document.getElementById('results').innerHTML = result;
+
+  var ads="";
+  if (adsResult.length > 0) {
+    ads += "<h6>Advertisements</h6>";
+  }
+  for (var i=0; i<adsResult.length; i++) {
+    ads += "<p>" + adsResult[i] + "</p>";
+  }
+  document.getElementById('ads').innerHTML = ads;
+}
+
+const SearchWeb = async (searchCriteria) =>
+{
+  try {
+    let xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        var j = JSON.parse(this.response);
+        searchResult = j.answer;
+        Display().catch(err => console.log(err));
+      }
+    };
+    xhttp.open("GET",searchURL+"?search="+searchCriteria);
+    xhttp.send();
+
+  } catch (err) {
+    searchResult = "";
+    console.log(err);
+    Display().catch(err => console.log(err));
+  }
+  return;
+}
+
+const SearchAds = async (searchCriteria) =>
+{
+  try {
+    let xhttp2 = new XMLHttpRequest();
+    xhttp2.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        adsResult = JSON.parse(this.response);
+        Display().catch(err => console.log(err));
+      }
+    };
+    xhttp2.open("GET",adsURL + "/adverts/" + searchCriteria);
+    xhttp2.send();
+  } catch (err) {
+    adsResult = "";
+    console.log(err);
+    Display().catch(err => console.log(err));
+  }
+  return;
 }
 
 const Search = async () =>
 {
   searchCriteria = document.getElementById('display').value;
-      try {
-          let xhttp = new XMLHttpRequest();
-          xhttp.onreadystatechange = function() {
-              if (this.readyState == 4 && this.status == 200) {
-                  var j = JSON.parse(this.response);
-                  searchResult = j.answer;
-                  Display().catch(err => console.log(err));
-              }
-          };
-
-          xhttp.open("GET",searchURL+"?search="+searchCriteria);
-          xhttp.send();
-        } catch (err) {
-          searchResult = "";
-            console.log(err);
-            Display().catch(err => console.log(err));
-        }
-          return;
+  await SearchWeb(searchCriteria);
+  await SearchAds(searchCriteria);
+  Display().catch(err => console.log(err));
+  return;
 }
 
 </script>
@@ -94,6 +134,7 @@ body  {
         <button class="searchButton" onclick="Search();">Search</button>
     </div>
     <div id="results"></div>
+    <div id="ads"></div>
 </div>
 </body>
 
