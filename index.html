@@ -62,7 +62,7 @@ const SearchAds = async (searchCriteria) =>
         Display().catch(err => console.log(err));
       }
     };
-    xhttp2.open("GET",adsURL + "/adverts/" + searchCriteria);
+    xhttp2.open("GET",adsURL +"?search="+searchCriteria);
     xhttp2.send();
   } catch (err) {
     adsResult = "";
