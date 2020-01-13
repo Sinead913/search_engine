@@ -58,7 +58,8 @@ const SearchAds = async (searchCriteria) =>
     let xhttp2 = new XMLHttpRequest();
     xhttp2.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
-        adsResult = JSON.parse(this.response);
+        var j = JSON.parse(this.response);
+        adsResult = j.ads;
         Display().catch(err => console.log(err));
       }
     };
